@@ -249,9 +249,11 @@ run_spim (mem_addr initial_PC, int steps_to_run, bool display)
 	      {
 		/* Timer expired */
 		bump_CP0_timer ();
+		
+		SPIM_timerHandler();
 
 		/* Restart timer for next interval */
-                start_CP0_timer ();
+		start_CP0_timer ();
 	      }
 	  }
 #endif
@@ -1720,7 +1722,7 @@ start_CP0_timer ()
             time.it_interval.tv_sec = 0;
             time.it_interval.tv_usec = 0;
             time.it_value.tv_sec = 0;
-            time.it_value.tv_usec = TIMER_TICK_MS * 1000;
+            time.it_value.tv_usec = TIMER_TICK_MS * 100;
             if (-1 == setitimer (ITIMER_REAL, &time, NULL))
             {
                 perror ("setitmer failed");
